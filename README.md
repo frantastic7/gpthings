@@ -9,3 +9,7 @@ LLaMa as soon as I get more RAM.
 Scripts :
 
 1. Stock evaluation (Not financial advice, not GPT-4 yet, decision making capabilities limited)
+2. Elvish translation (Sindarin - WIP)  
+  
+    
+You can find some of these scripts implemented as Discord bots over on https://github.com/frantastic7/discordbots
