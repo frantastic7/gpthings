@@ -2,9 +2,6 @@
 
 #NOT FINANCAL ADVICE
 
-
-#!/usr/bin/env python3
-
 import openai
 import requests 
 import sys
