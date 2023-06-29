@@ -2,7 +2,6 @@
 
 import youtube_dl
 import whisper
-import sys
 import openai
 import os
 from dotenv import load_dotenv
