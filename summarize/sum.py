@@ -89,6 +89,9 @@ role = "You will be given the transcript of an audio file. Your job is to summar
 
 toks = int (1.2 * get_seconds(url))
 
+if toks > 4096 :
+    toks = 4096
+
 
 summary = openai.Completion.create (
 
