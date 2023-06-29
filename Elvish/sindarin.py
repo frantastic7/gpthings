@@ -1,10 +1,11 @@
 import openai
-from dotenv import dotenv_values
+import os
+from dotenv import load_dotenv
 import json
 
-env_values = dotenv_values(".env")
+load_dotenv()
 
-openai.api_key = env_values.get("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 with open('eng_to_elv.json') as file:
