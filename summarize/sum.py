@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+MAX_TOKENS = 4096
 
 #Api keys, loaded in from a .env file
 
@@ -83,14 +84,14 @@ transcript = result["text"]
 
 #Preprompt for GPT. Modify as needed.
 
-role = "You will be given the transcript of an audio file. Your job is to summarise it concisely and write a few short note/talking points about the transcript. \n"
+role = "You will be given the transcript of an audio file. Your job is to summarise it concisely and write a few short note/talking points about the transcript. Please use at least half of the provided the provided tokens \n"
 
 #assuming we cut the content by 60% in a summary, from 120-150 wpm, we go down to around 48-60, which would equate to about 70 per minute of audio max.
 
 toks = int (1.2 * get_seconds(url))
 
-if toks > 4096 :
-    toks = 4096
+if toks > MAX_TOKENS :
+    toks = MAX_TOKENS
 
 
 summary = openai.Completion.create (
@@ -106,4 +107,3 @@ summary = openai.Completion.create (
 
 print (f'Summary of {title} :\n')
 print(summary.choices[0].text.strip())
-print(toks)
