@@ -6,19 +6,20 @@ import openai
 import requests 
 import sys
 import json
-from dotenv import dotenv_values
+import os
+from dotenv import load_dotenv
 
-env_values = dotenv_values(".env")
+load_dotenv()
 
 
 #OpenAI API key
-openai.api_key = env_values.get("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 #AlphaVantage API key (price data)
-AVapiKey = env_values.get("ALPHA_VANTAGE_API_KEY")
+AVapiKey = os.getenv("ALPHA_VANTAGE_API_KEY")
 
 #FinancialModelingPrep API (balance sheet and company data)
-apiFMP = env_values.get("FMP_API_KEY")
+apiFMP = os.getenv("FMP_API_KEY")
 
 
 #Symbol for the company you wanna check, needs to be in caps for API calls, eg. AAPL 
