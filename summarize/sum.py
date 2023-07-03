@@ -103,7 +103,7 @@ transcript = result['text']
 
 #Preprompt for GPT. Modify as needed.
 
-role = 'You will be given the transcript of an audio file. Your job is to summarise it concisely and write a few short note/talking points about the transcript. Please use at least half of the provided the provided tokens \n'
+role = 'You will be given the transcript of an audio file. Your job is to summarise it concisely and write a few short note/talking points about the transcript. Please be careful about utilising the amount of tokens provided. If the audio contains any mention of standard YouTube talk about liking and subscribing please leave that out of the summary as it is not necessary information. All the given content if of an informational or info-educational variety. Do you best to give the user the most important info, especially if you are given a product review \n'
 
 #assuming we cut the content by 60% in a summary, from 120-150 wpm, we go down to around 48-60, which would equate to about 70 per minute of audio max.
 
@@ -115,7 +115,8 @@ if toks > MAX_TOKENS :
 
 
 if len(argv) > 1 and argv[1] == '-a':
-    toks = 180
+    #if we use audio, we have to limit tokens, XI LABS free tier api is only 10k chars per month. Will update to an on device voice gen soon.
+    toks = 250
 
     summary = openai.Completion.create (
 
