@@ -12,5 +12,5 @@ Scripts :
 2. Elvish translation (Sindarin - WIP)
 3. Whisper+GTP3 powered video summary script + AI voiceover
   
-    
+! Please use "pip install -r requirements.txt" to get all the needed libraries !    
 You can find some of these scripts implemented as Discord bots over on https://github.com/frantastic7/discordbots
