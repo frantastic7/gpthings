@@ -55,6 +55,7 @@ def get_title (url) :
         video_title = info.get('title','')
     return video_title
 
+#YT-DL get length of video function, separate for ease of modifications
 
 def get_seconds (url) :
     options = {
@@ -67,6 +68,7 @@ def get_seconds (url) :
         length = info['duration']
     return length
 
+#Pygame audio player
 def play_audio (file):
     pygame.init()
     pygame.mixer.init() 
@@ -113,12 +115,11 @@ if toks > MAX_TOKENS :
     toks = MAX_TOKENS
 
 
-
 if len(argv) > 1 and argv[1] == '-a':
     #if we use audio, we have to limit tokens, XI LABS free tier api is only 10k chars per month. Will update to an on device voice gen soon.
     toks = 250
-
-    role += "For this summary you only have 250 tokens. Please use them accordingly, make sure your sentences are concise with high information density"
+    #aditional propmpt for voice over summation
+    role += "For this summary you only have 250 tokens. Please use them accordingly, make sure your sentences are concise with high information density."
 
     summary = openai.Completion.create (
 
@@ -137,7 +138,7 @@ if len(argv) > 1 and argv[1] == '-a':
     #Change it to your liking, all the base voices by ELEVEN LABS can be found in the models.json file
     voice_ID = 'TxGEqnHWrfWFTfGW9XjX'
     voice_url = f'https://api.elevenlabs.io/v1/text-to-speech/{voice_ID}'
-
+    #request parameters for xi_labs api
     headers = {
         'Accept': 'audio/mpeg',
         'Content-Type': 'application/json',
@@ -158,7 +159,7 @@ if len(argv) > 1 and argv[1] == '-a':
     summary_file = title + '_summary.mp3'
     
 
-
+#Creates audio and textual file of summary
     with open (summary_file, 'wb') as audio_new :
         for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
             if chunk:
@@ -166,6 +167,7 @@ if len(argv) > 1 and argv[1] == '-a':
     with open (output, 'w') as summary_text :
         summary_text.write(summary.choices[0].text.strip())
 
+#Checks platform and sends notification that the script is finished, doing it like this to avoid adding aditional libraries
     if platform.startswith('win'):
 
         subprocess.run(['powershell', '-Command', 'New-BurntToastNotification -Text "Summary ready to play"'])
@@ -178,6 +180,7 @@ if len(argv) > 1 and argv[1] == '-a':
 
         subprocess.run(['notify-send', 'Summary ready to play']) 
 
+#halts the program to let us play audio at our convinience
     play = input ("Press enter to play summary audio file.")
 
     play_audio(summary_file)
@@ -193,12 +196,14 @@ else:
         temperature = 0.7
 
     )
-    
+#text summary both in terminal and in the form of a .txt file
     print (f'Summary of {title} :\n')
     print(summary.choices[0].text.strip())
 
     with open (output, 'w') as summary_text :
         summary_text.write(summary.choices[0].text.strip())
+
+#Checks platform and sends notification that the script is finished, doing it like this to avoid adding aditional libraries
 
     if platform.startswith('win'):
 
