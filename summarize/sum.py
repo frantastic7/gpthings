@@ -4,7 +4,8 @@ import youtube_dl
 import whisper
 import openai
 import os
-from sys import argv
+from sys import argv, platform
+import subprocess
 from dotenv import load_dotenv
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 import pygame
@@ -88,7 +89,7 @@ url = input ('YouTube video link : ')
 
 title = get_title(url)
 audio_download(url)
-
+output = title + '_summary.txt'
 
 #Loads whisper model, 'base.en' works fine for a large percentage of cases
 model = whisper.load_model('base.en')
@@ -122,7 +123,7 @@ if len(argv) > 1 and argv[1] == '-a':
     prompt = role + transcript,
     max_tokens =  toks,
     n=1,
-    temperature = 0.3
+    temperature = 0.7
 
 )
     import requests
@@ -152,14 +153,31 @@ if len(argv) > 1 and argv[1] == '-a':
     response = requests.post(voice_url, json=data, headers=headers)
 
     summary_file = title + '_summary.mp3'
+    
+
 
     with open (summary_file, 'wb') as audio_new :
         for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
             if chunk:
                 audio_new.write(chunk)
-    
-    play_audio(summary_file)
+    with open (output, 'w') as summary_text :
+        summary_text.write(summary.choices[0].text.strip())
 
+    if platform.startswith('win'):
+
+        subprocess.run(['powershell', '-Command', 'New-BurntToastNotification -Text "Summary ready to play"'])
+
+    elif platform.startswith('darwin'):
+
+        subprocess.run(['osascript', '-e', 'display notification "Summary ready to play" with title "Summary finished"'])
+
+    elif platform.startswith('linux'):
+
+        subprocess.run(['notify-send', 'Summary ready to play']) 
+
+    play = input ("Press enter to play summary audio file.")
+
+    play_audio(summary_file)
 
 else:
 
@@ -169,9 +187,29 @@ else:
         prompt = role + transcript,
         max_tokens =  toks,
         n=1,
-        temperature = 0.3
+        temperature = 0.7
 
     )
-
+    
     print (f'Summary of {title} :\n')
     print(summary.choices[0].text.strip())
+
+    with open (output, 'w') as summary_text :
+        summary_text.write(summary.choices[0].text.strip())
+
+    if platform.startswith('win'):
+
+        subprocess.run(['powershell', '-Command', 'New-BurntToastNotification -Text "Summary finished"'])
+
+    elif platform.startswith('darwin'):
+
+        subprocess.run(['osascript', '-e', 'display notification "Summary ready" with title "Summary finished"'])
+
+    elif platform.startswith('linux'):
+
+        subprocess.run(['notify-send', 'Summary finished']) 
+
+    
+    
+
+
