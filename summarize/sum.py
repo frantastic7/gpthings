@@ -118,6 +118,8 @@ if len(argv) > 1 and argv[1] == '-a':
     #if we use audio, we have to limit tokens, XI LABS free tier api is only 10k chars per month. Will update to an on device voice gen soon.
     toks = 250
 
+    role += "For this summary you only have 250 tokens. Please use them accordingly, make sure your sentences are concise with high information density"
+
     summary = openai.Completion.create (
 
     engine = 'text-davinci-003',

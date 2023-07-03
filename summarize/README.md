@@ -1,5 +1,9 @@
 # Summary
 
+Are you tired of YouTube videos being plagued with double ads? Annoyed by them being stretched out with meaningless jabber just to meet ad requirements?  
+
+Summary is the solution! A 10 minute video condensed into a 30 second highly informative summary with AI voiceover. (Takes about 2 minutes to download, transcribe,summariez and generate the voiceover of a 10 minute video -- the script will nofity you when the voiceover is ready to be played!!)  
+
 Whisper + GPT3 powered tool used to transcribe and summarize youtube videos.
 Using youtube-dl to download the videos.  
 
