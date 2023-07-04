@@ -17,9 +17,24 @@ def latex_compile(path):
     except subprocess.CalledProcessError as err:
         print(f"LaTeX compilation failed with error: {err}")
 
+#sometimes it make the file perfect but adds a random word infront of everything causing it to be uncompileable, this checks the first line and fixes if it neccesary
+def first_line_fix(filename, starting_line):
+    with open(filename, 'r+') as file:
+        first_line = file.readline()
+        if not first_line.startswith(starting_line):
+            lines = file.readlines()
+            file.seek(0)
+            file.writelines(lines[1:])
+            file.truncate()
+
+starting_line = r'\documentclass{article}'
+
+
+
+
 role = r"""
 
-You will be provided with a question, your job is to compile notes on said question.
+You will be provided with a topic, your job is to compile notes on said question.
 
 ! IMPORTANT !
     FOR MATH AND PHYSICS QUESTIONS PROVIDE EQUATIONS
@@ -29,16 +44,17 @@ You will be provided with a question, your job is to compile notes on said quest
 All your writings must be in a .tex format, one that is able to be compiled with pdflatex.
 
 ! IMPORTANT !
-Always begin the document with :
+Always begin the OUTPUT with :
 \documentclass{article}
 \begin{document}
 ! IMPORTANT !
 
 Be sure to add the appropriate '\usepackage' that are required for said notes.
 
-Example input : "Explain Newton's first law"
+Example input : "Newton's first law"
 
 Example output : 
+"
 \documentclass{article}
 \usepackage{amsmath}
 \begin{document}
@@ -68,7 +84,9 @@ Here are some equations related to Newton's first law:
   \end{equation*}
 \end{enumerate}
 
-\end{document}
+\end{document} 
+"
+
 
 """
 
@@ -82,13 +100,16 @@ notes = openai.Completion.create (
     prompt = role + prompt,
     max_tokens = int(toks.get(argv[1])),
     n=1,
-    temperature = 0.5
+    temperature = 0.7
 
 )
 
+
 with open (tex_file_path,"w") as file :
-    file.write(notes.choices[0].text.strip())
+        file.write(notes.choices[0].text.strip())
+
+first_line_fix(tex_file_path, starting_line)
+
 latex_compile(tex_file_path)
 latex_file = prompt + ".pdf"
 subprocess.run(['open',latex_file])
-
