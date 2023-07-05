@@ -1,6 +1,6 @@
 import subprocess
 import os
-from sys import argv
+from sys import argv, platform
 import openai
 from dotenv import load_dotenv
 
@@ -112,4 +112,9 @@ first_line_fix(tex_file_path, starting_line)
 
 latex_compile(tex_file_path)
 latex_file = prompt + ".pdf"
-subprocess.run(['open',latex_file])
+
+
+if platform.startswith('win'):
+        subprocess.run([latex_file])
+else :
+        subprocess.run(['open',latex_file])
