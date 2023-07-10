@@ -2,7 +2,7 @@
 
 Various useful GPT powered scripts.
 
-Using openAI api.  
+Using openAI api.(GPT-4 update coming soon)  
 
 LLaMa as soon as I get more RAM.
 
