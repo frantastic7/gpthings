@@ -1,14 +1,12 @@
 import subprocess
 import os
-from sys import argv, platform
+from sys import platform
 import openai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
-
-toks = {"s":512,"m":1024,"l":2048,"max":4096}
 
 
 def latex_compile(path):
@@ -30,11 +28,10 @@ def first_line_fix(filename, starting_line):
 starting_line = r'\documentclass{article}'
 
 
-
-
 role = r"""
+  You are LaTeCh. A large language model trained to provided structred .tex files ready for latex compilation. 
 
-You will be provided with a topic, your job is to compile notes on said question.
+  You notes should always be extensive and highly detailed. Your notes must be at least 1000 words long, or more if the topic is complex, like quantum physics, cryptography, artifcial intelligence and such. You must includ examples and equations.
 
 ! IMPORTANT !
     FOR MATH AND PHYSICS QUESTIONS PROVIDE EQUATIONS
@@ -93,20 +90,24 @@ Here are some equations related to Newton's first law:
 
 prompt = input ("What notes would you like ? ")
 
+
 tex_file_path = prompt.strip()+".tex"
 
-notes = openai.Completion.create (
-    engine = 'text-davinci-003',
-    prompt = role + prompt,
-    max_tokens = int(toks.get(argv[1])),
-    n=1,
-    temperature = 0.7
+model_prompt=[{"role": "user", "content": role+prompt}]
 
+
+notes = openai.ChatCompletion.create (
+    model="gpt-3.5-turbo-16k",
+    messages = model_prompt,
+    temperature=0.5,
+    max_tokens=7500,
+    frequency_penalty=0.0
 )
 
 
+
 with open (tex_file_path,"w") as file :
-        file.write(notes.choices[0].text.strip())
+        file.write(notes.choices[0].message.content.strip())
 
 first_line_fix(tex_file_path, starting_line)
 
