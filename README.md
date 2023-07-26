@@ -2,13 +2,13 @@
 
 Various useful GPT powered scripts.
 
-Using openAI api.(GPT-4 update coming soon)  
+Using openAI api. GPT-4 powered.
 
 LLaMa as soon as I get more RAM.
 
 Scripts :
 
-1. Stock evaluation (Not financial advice, not GPT-4 yet, decision making capabilities limited)
+1. Stock evaluation (GPT-4 update, still not financial advice)
 2. Elvish translation (Sindarin - WIP)
 3. Whisper+GTP3 powered video summary script + AI voiceover
 4. Latextech - generate and compile latex notes in seconds  
