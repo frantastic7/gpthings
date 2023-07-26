@@ -25,10 +25,6 @@ apiFMP = os.getenv("FMP_API_KEY")
 #Symbol for the company you wanna check, needs to be in caps for API calls, eg. AAPL 
 symbol = sys.argv[1].upper()
 
-#Defines amount of tokens for the output, modify as needed. 4k/16k max depending on your api choice
-toks = {"s":128,"m":256,"l":512}
-
-
 role = """
     You are an analyst at a top investment firm. You will recieve data about a company, including its balance sheet and recent price data, along with trading volume. You primrary task is to assest the companys financials and provide an verdict on the company stock. Verdict options include : ["HOLD","BUY","SELL","SHORT"]. Also provide a volatility raiting : ["Low","Medium","High","Extreme"].
 
@@ -67,15 +63,18 @@ else :
     print('no work :( 2', balance_data_json.status_code)
 
 
-evaluation = openai.Completion.create (
+messages = [
+    {"role": "system", "content": role},
+    {"role": "user", "content": json.dumps(balance_sheet)},
+    {"role": "user", "content": json.dumps(prices)}
+]
 
-    engine = "text-davinci-003",
-    prompt = role + "\n" + json.dumps(balance_sheet) + "\n" + json.dumps(prices),
-    max_tokens = int(toks.get(sys.argv[2])),
-    n=1,
-    temperature = 0.5
-
+evaluation = openai.ChatCompletion.create(
+  model="gpt-4-0613",
+  messages=messages,
+  max_tokens=4096,
+  n=1,
+  temperature=0.2
 )
 
-
-print (evaluation.choices[0].text.strip())
+print(evaluation.choices[0].message['content'].strip())
