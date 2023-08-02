@@ -1,4 +1,7 @@
 youtube_dl
+openai
+numpy
+sounddevice
 whisper
 pygame
 dotenv
