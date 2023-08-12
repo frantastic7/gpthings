@@ -12,6 +12,16 @@ Youtube-dl has a bug as of writing this code. Big thanks to Jared Thomas (https:
 Use "-a" if you want the an AI generated voice to read the summary for you. 
 
 For the AI voiceover I used the elevenlabs.io API (https://beta.elevenlabs.io). Feel free to modify the voice, all of the models are provided in the models.json file.
-  
-  
+
+# Enviorment variables 
+
+Set up a .env file as such :  
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+FMP_API_KEY=your_fmp_api_key
+ALPHA_VANTAGE_API_KEY=your_av_api_key
+XI_LABS_API=your_xilabs_api_key
+```  
+
 TODO : fix Whisper issues (coming this week)
