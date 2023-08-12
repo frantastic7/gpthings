@@ -4,7 +4,10 @@ Need notes? In a hurry? Don't have time to write down all the equations in LaTeX
 
 Latextech has the solution, simply give it a prompt and it will generate notes, provide equations and compile a pdf file for you.  
 
-Useage : "python3 latextech.py" 
+Just use
+```bash
+python3 latextech.py
+```  
 
 The example pdf provided had simply the prompt "lagrangian"
 
