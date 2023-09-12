@@ -12,7 +12,7 @@ import pygame
 
 load_dotenv()
 
-MAX_TOKENS = 4096
+MAX_TOKENS = 8192
 
 #Api keys, loaded in from a .env file
 
@@ -124,22 +124,21 @@ if toks > MAX_TOKENS :
 
 if len(argv) > 1 and argv[1] == '-a':
     #if we use audio, we have to limit tokens, XI LABS free tier api is only 10k chars per month. Will update to an on device voice gen soon.
-    toks = 250
+    toks = 500
     #aditional propmpt for voice over summation
     role += "For this summary you only have 250 tokens. Please use them accordingly, make sure your sentences are concise with high information density."
+    messages = [{"role":"system","content":role},{"role":"user","content":transcript}]
+    summary = openai.ChatCompletionCompletion.create (
 
-    summary = openai.Completion.create (
+        engine = "gpt-3.5-turbo-16k",
+        messages = messages,
+        max_tokens =  toks,
+        temperature = 0.5
 
-    engine = 'text-davinci-003',
-    prompt = role + transcript,
-    max_tokens =  toks,
-    n=1,
-    temperature = 0.7
-
-)
+    )
     import requests
 
-    user_input = summary.choices[0].text.strip()
+    user_input = summary.choices[0].message['content'].strip()
     CHUNK_SIZE = 1024
 
     #Change it to your liking, all the base voices by ELEVEN LABS can be found in the models.json file
@@ -172,7 +171,7 @@ if len(argv) > 1 and argv[1] == '-a':
             if chunk:
                 audio_new.write(chunk)
     with open (output, 'w') as summary_text :
-        summary_text.write(summary.choices[0].text.strip())
+        summary_text.write(summary.choices[0].message['content'].strip())
 
 #Checks platform and sends notification that the script is finished, doing it like this to avoid adding aditional libraries
     if platform.startswith('win'):
@@ -193,22 +192,21 @@ if len(argv) > 1 and argv[1] == '-a':
     play_audio(summary_file)
 
 else:
+    messages = [{"role":"system","content":role},{"role":"user","content":transcript}]
+    summary = openai.ChatCompletionCompletion.create (
 
-    summary = openai.Completion.create (
-
-        engine = 'text-davinci-003',
-        prompt = role + transcript,
+        engine = "gpt-3.5-turbo-16k",
+        messages = messages,
         max_tokens =  toks,
-        n=1,
-        temperature = 0.7
+        temperature = 0.5
 
     )
 #text summary both in terminal and in the form of a .txt file
     print (f'Summary of {title} :\n')
-    print(summary.choices[0].text.strip())
+    print(summary.choices[0].message['content'].strip())
 
     with open (output, 'w') as summary_text :
-        summary_text.write(summary.choices[0].text.strip())
+        summary_text.write(summary.choices[0].message['content'].strip())
 
 #Checks platform and sends notification that the script is finished, doing it like this to avoid adding aditional libraries
 
