@@ -23,5 +23,3 @@ FMP_API_KEY=your_fmp_api_key
 ALPHA_VANTAGE_API_KEY=your_av_api_key
 XI_LABS_API=your_xilabs_api_key
 ```  
-
-TODO : fix Whisper issues (coming this week)
